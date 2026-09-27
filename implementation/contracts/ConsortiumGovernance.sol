@@ -68,9 +68,14 @@ contract ConsortiumGovernance {
         }
     }
 
+    /// @dev Membership and issuer registration are related but distinct: a
+    /// founding governance member (seeded in the constructor) may not yet be
+    /// a registered issuer, so this only requires that the institution isn't
+    /// *already an active issuer* — execution adds membership too, but only
+    /// if the institution isn't a member yet (see _execute).
     function proposeAddInstitution(address institution, string calldata did, address initialSigningKey) external onlyMember returns (uint256) {
         require(institution != address(0) && initialSigningKey != address(0), "Governance: zero address");
-        require(!isMember[institution], "Governance: institution already a member");
+        require(!issuerRegistry.isActiveIssuer(institution), "Governance: institution already an active issuer");
         return _createProposal(ProposalType.AddInstitution, institution, did, initialSigningKey);
     }
 
@@ -119,9 +124,11 @@ contract ConsortiumGovernance {
         Proposal storage p = proposals[proposalId];
         p.executed = true;
         if (p.proposalType == ProposalType.AddInstitution) {
-            isMember[p.institution] = true;
-            memberList.push(p.institution);
-            emit MemberAdded(p.institution);
+            if (!isMember[p.institution]) {
+                isMember[p.institution] = true;
+                memberList.push(p.institution);
+                emit MemberAdded(p.institution);
+            }
             issuerRegistry.registerIssuer(p.institution, p.did, p.signingKey);
         } else if (p.proposalType == ProposalType.RemoveInstitution) {
             isMember[p.institution] = false;

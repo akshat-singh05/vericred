@@ -15,3 +15,11 @@ paper/**/*.fdb_latexmk
 paper/**/*.fls
 paper/**/*.synctex.gz
 frontend_build/
+
+# Generated at `npm run deploy` time — throwaway local-devnet addresses and
+# demo signing keys (fresh random wallet per deploy), never real secrets.
+implementation/backend/deployment.json
+implementation/backend/data/
+implementation/frontend/node_modules/
+implementation/frontend/dist/
+implementation/frontend/build/

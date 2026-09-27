@@ -70,10 +70,31 @@ describe("ConsortiumGovernance", function () {
     await expect(governance.connect(m1).vote(999)).to.be.revertedWith("Governance: unknown proposal");
   });
 
-  it("rejects proposing to add an address that is already a member", async function () {
+  it("allows proposing issuer status for an address that is already a governance member but not yet an issuer", async function () {
+    // m2 was seeded as a founding governance member in beforeEach but has no issuer registration yet —
+    // this must be allowed so a consortium can bootstrap with governance-only founding members.
+    await expect(governance.connect(m1).proposeAddInstitution(m2.address, "did:vericred:m2", m2.address)).to.not.be
+      .reverted;
+  });
+
+  it("rejects proposing to add an institution that is already an active issuer", async function () {
+    await onboardInstitution(governance, [m1, m2], newUni, "did:vericred:new", newUniKey);
     await expect(
-      governance.connect(m1).proposeAddInstitution(m2.address, "did:vericred:dup", m2.address)
-    ).to.be.revertedWith("Governance: institution already a member");
+      governance.connect(m1).proposeAddInstitution(newUni.address, "did:vericred:dup", newUniKey.address)
+    ).to.be.revertedWith("Governance: institution already an active issuer");
+  });
+
+  it("registers issuer status for an already-existing member without duplicating membership", async function () {
+    const beforeCount = await governance.memberCount();
+    const tx = await governance.connect(m1).proposeAddInstitution(m2.address, "did:vericred:m2", m2.address);
+    const receipt = await tx.wait();
+    const created = receipt.logs.map((l) => {
+      try { return governance.interface.parseLog(l); } catch { return null; }
+    }).find((e) => e && e.name === "ProposalCreated");
+    await governance.connect(m3).vote(created.args.proposalId);
+
+    expect(await governance.memberCount()).to.equal(beforeCount); // unchanged, no duplicate
+    expect(await issuerRegistry.isActiveIssuer(m2.address)).to.equal(true);
   });
 
   it("removes an institution and deactivates its issuer status", async function () {
