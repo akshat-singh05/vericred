@@ -1,0 +1,7 @@
+batchSize,expectedProofLength_log2n,actualBatchLeafProofLength,onChainReadMs_avg,signatureCheckMs_avg,merkleProofCheckMs_avg,revocationCheckMs_avg,totalMs_avg,totalMs_min,totalMs_max,trials
+1,1,0,3.998,10.684,0.960,1.392,17.034,14.364,20.111,10
+10,4,4,5.323,14.169,1.337,1.986,22.815,19.869,25.898,10
+100,7,7,3.960,8.890,0.921,1.056,14.826,12.329,17.719,10
+500,9,9,3.779,9.410,1.039,1.255,15.483,12.319,17.968,10
+1000,10,10,4.431,10.534,1.326,1.507,17.798,15.105,20.381,10
+5000,13,13,6.841,14.460,2.053,2.009,25.362,19.321,36.254,10

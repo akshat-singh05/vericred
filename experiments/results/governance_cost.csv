@@ -1,0 +1,5 @@
+threshold_M,totalMembers_N,transactionsNeeded,totalGasUsed,avgGasPerTransaction,totalGasUsd,gasPriceGwei,ethUsdPrice,assumptionsDate
+1,1,1,432213,432213.0,25.9328,20,3000,2026-09-27
+2,3,2,502443,251221.5,30.1466,20,3000,2026-09-27
+3,5,3,562161,187387.0,33.7297,20,3000,2026-09-27
+5,9,5,681585,136317.0,40.8951,20,3000,2026-09-27

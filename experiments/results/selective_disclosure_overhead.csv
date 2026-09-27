@@ -1,0 +1,9 @@
+totalSchemaFields,disclosedFieldCount,undisclosedFieldCount,presentationSizeBytes_avg,presentationSizeBytes_min,presentationSizeBytes_max,verificationTimeMs_avg,batchSizeUsed,trials
+8,1,7,2262,2259,2266,26.510,1000,10
+8,2,6,2289,2286,2292,25.716,1000,10
+8,3,5,2312,2309,2316,30.650,1000,10
+8,4,4,2344,2340,2348,31.060,1000,10
+8,5,3,2368,2365,2370,32.639,1000,10
+8,6,2,2391,2387,2394,31.196,1000,10
+8,7,1,2401,2220,2423,32.561,1000,10
+8,8,0,2449,2447,2451,32.965,1000,10

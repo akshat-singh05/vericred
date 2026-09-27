@@ -23,3 +23,5 @@ implementation/backend/data/
 implementation/frontend/node_modules/
 implementation/frontend/dist/
 implementation/frontend/build/
+__pycache__/
+*.pyc
