@@ -137,4 +137,17 @@ describe("ConsortiumGovernance", function () {
       "Governance: caller is not a consortium member"
     );
   });
+
+  it("reports hasVoted correctly per member", async function () {
+    const tx = await governance.connect(m1).proposeAddInstitution(newUni.address, "did:vericred:new", newUniKey.address);
+    const receipt = await tx.wait();
+    const created = receipt.logs.map((l) => {
+      try { return governance.interface.parseLog(l); } catch { return null; }
+    }).find((e) => e && e.name === "ProposalCreated");
+    const proposalId = created.args.proposalId;
+
+    expect(await governance.hasVoted(proposalId, m1.address)).to.equal(true); // auto-voted as proposer
+    expect(await governance.hasVoted(proposalId, m2.address)).to.equal(false);
+    expect(await governance.hasVoted(proposalId, m3.address)).to.equal(false);
+  });
 });

@@ -92,6 +92,22 @@ describe("IssuerRegistry", function () {
     );
   });
 
+  it("tracks institutionCount and exposes full key history via keyHistoryAt", async function () {
+    expect(await issuerRegistry.institutionCount()).to.equal(0);
+    await issuerRegistry.connect(governance).registerIssuer(institution.address, "did:vericred:vit", institution.address);
+    expect(await issuerRegistry.institutionCount()).to.equal(1);
+
+    await issuerRegistry.connect(governance).rotateKey(institution.address, otherKey.address);
+    expect(await issuerRegistry.keyHistoryLength(institution.address)).to.equal(2);
+
+    const rec0 = await issuerRegistry.keyHistoryAt(institution.address, 0);
+    expect(rec0.signingKey).to.equal(institution.address);
+    expect(rec0.validUntil).to.not.equal(0n); // closed out by the rotation
+    const rec1 = await issuerRegistry.keyHistoryAt(institution.address, 1);
+    expect(rec1.signingKey).to.equal(otherKey.address);
+    expect(rec1.validUntil).to.equal(0n); // still open
+  });
+
   function anyValueTimestamp() {
     // chai-matchers doesn't ship anyValue by default in this toolbox version for withArgs blocks;
     // simplest robust check is to just not assert the exact timestamp value.
