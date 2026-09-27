@@ -1,0 +1,17 @@
+node_modules/
+implementation/artifacts/
+implementation/cache/
+implementation/coverage/
+implementation/typechain-types/
+*.log
+.env
+paper/*.pdf
+paper/**/*.aux
+paper/**/*.bbl
+paper/**/*.blg
+paper/**/*.log
+paper/**/*.out
+paper/**/*.fdb_latexmk
+paper/**/*.fls
+paper/**/*.synctex.gz
+frontend_build/
