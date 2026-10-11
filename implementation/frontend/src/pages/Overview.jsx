@@ -1,5 +1,5 @@
 import { useApp, PROPOSAL_TYPES } from "../context";
-import { Badge, Button, Card, Empty, Hash, Icon, StatCard, fmtCompact, fmtNum, shortHash, timeAgo } from "../ui";
+import { Badge, Button, Card, Empty, Guide, Hash, Icon, StatCard, fmtCompact, fmtNum, shortHash, timeAgo } from "../ui";
 
 // Measured results (experiments/results/issuance_cost.csv): on-chain gas to
 // issue a cohort of the given size, anchored as one batch vs. one credential
@@ -98,6 +98,21 @@ export default function Overview() {
           <li><Icon name="users" size={18} /><span><strong>Consortium governance</strong> M-of-N votes admit issuers</span></li>
         </ul>
       </section>
+
+      <div className="gap-top">
+        <Guide
+          id="overview"
+          title="Quick start: run the whole demo in five steps"
+          intro="Follow these in order. Each page also has its own guide."
+          steps={[
+            { title: "Issue a cohort", text: "Anchor the sample class of three students on the blockchain with one transaction.", go: "issuer", goLabel: "Go to Issuer", done: !!stats && stats.batchCount > 0 },
+            { title: "Share selectively", text: "As a student (ID S101), hide the GPA and generate a presentation.", go: "holder", goLabel: "Go to Holder" },
+            { title: "Verify it", text: "As an employer, verify the presentation. Four checks run against the chain.", go: "verifier", goLabel: "Go to Verifier" },
+            { title: "Try to forge it", text: "Use Simulate tampering and watch the Merkle proof reject the altered degree.", go: "verifier", goLabel: "Go to Verifier" },
+            { title: "Govern the consortium", text: "Propose a new university and approve it with a second member.", go: "governance", goLabel: "Go to Governance" },
+          ]}
+        />
+      </div>
 
       <div className="grid-4 gap-top">
         <StatCard icon="layers" tone="blue" label="Credentials anchored" value={stats ? fmtNum(stats.credentialsAnchored) : "-"} hint={stats ? `in ${stats.batchCount} batch${stats.batchCount === 1 ? "" : "es"}` : ""} />

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { api } from "../api";
 import { useApp } from "../context";
-import { Badge, Button, Card, Icon, PageHeader, useToast } from "../ui";
+import { Badge, Button, Card, Guide, Icon, PageHeader, useToast } from "../ui";
 
 const STEPS = [
   { key: "issuer_membership", icon: "building", title: "Issuer membership", question: "Is the issuing institution an active member of the consortium?" },
@@ -109,6 +109,19 @@ export default function Verifier() {
       <PageHeader eyebrow="Role: Employer" title="Verify a credential against the blockchain">
         Paste or scan a presentation. Every trust decision is read from the chain, nothing the presentation claims about itself is trusted.
       </PageHeader>
+
+      <Guide
+        id="verifier"
+        title="How to verify a credential"
+        intro="Acts as the employer. No contact with the university is needed."
+        steps={[
+          { title: "Load a presentation", text: "Use Send to Verifier on the Holder page (it fills this box automatically), or paste the JSON or upload a .json file.", done: !!text.trim(), go: "holder", goLabel: "Create one in the Holder page" },
+          { title: "Click Verify credential", text: "Four checks run against the blockchain, in order: issuer membership, issuer signature, Merkle proof, revocation status.", done: !!result },
+          { title: "Read the verdict", text: "Green means every check passed and the shown claims are authentic. Red shows exactly which check failed and why.", done: !!done },
+          { title: "Try to cheat it", text: "Click Simulate tampering. The degree is changed to PhD before verifying, and the Merkle proof check rejects it.", done: !!tamperNote },
+          { title: "Try a revoked credential", text: "Revoke the student in the Issuer page, then verify the same presentation again. It now fails at the last check.", go: "issuer", goLabel: "Go to the issuer" },
+        ]}
+      />
 
       <div className="grid-verify">
         <Card title="Presentation" subtitle="JSON from the student, or the scanned QR payload" icon="file"

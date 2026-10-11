@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useApp } from "./context";
 
 /* ---------- Icons (24x24 stroke icons, no external dependency) ---------- */
 const PATHS = {
@@ -226,4 +227,59 @@ export function useInterval(fn, ms) {
     const id = setInterval(() => saved.current(), ms);
     return () => clearInterval(id);
   }, [ms]);
+}
+
+/* ---------- Step-by-step guide ---------- */
+// steps: [{ title, text, done?: boolean, go?: pageId, goLabel?: string }]
+// The first step that is not marked done is highlighted as "next".
+export function Guide({ id, title, intro, steps }) {
+  const { go } = useApp();
+  const key = `vericred-guide-${id}`;
+  const [open, setOpen] = useState(() => {
+    try {
+      return localStorage.getItem(key) !== "closed";
+    } catch {
+      return true;
+    }
+  });
+  const toggle = () => {
+    setOpen((o) => {
+      try {
+        localStorage.setItem(key, o ? "closed" : "open");
+      } catch {
+        /* storage unavailable */
+      }
+      return !o;
+    });
+  };
+  const next = steps.findIndex((s) => !s.done);
+  const doneCount = steps.filter((s) => s.done).length;
+
+  return (
+    <section className={`guide ${open ? "open" : ""}`}>
+      <button className="guide-head" onClick={toggle} aria-expanded={open}>
+        <span className="guide-icon"><Icon name="book" size={18} /></span>
+        <span className="guide-title">
+          <strong>{title}</strong>
+          {intro && <em>{intro}</em>}
+        </span>
+        {doneCount > 0 && <Badge tone="green">{doneCount} of {steps.length} done</Badge>}
+        <span className="guide-toggle">{open ? "Hide guide" : "Show guide"}<Icon name="chevron" size={16} className={open ? "rot" : ""} /></span>
+      </button>
+      {open && (
+        <ol className="guide-steps">
+          {steps.map((s, i) => (
+            <li key={s.title} className={`${s.done ? "done" : ""} ${i === next ? "next" : ""}`}>
+              <span className="guide-num">{s.done ? <Icon name="check" size={14} strokeWidth={3} /> : i + 1}</span>
+              <div>
+                <strong>{s.title}</strong>
+                <p>{s.text}</p>
+                {s.go && <button className="guide-go" onClick={() => go(s.go)}>{s.goLabel || "Open"} <Icon name="arrow" size={14} /></button>}
+              </div>
+            </li>
+          ))}
+        </ol>
+      )}
+    </section>
+  );
 }

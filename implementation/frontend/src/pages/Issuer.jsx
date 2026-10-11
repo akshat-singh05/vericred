@@ -1,19 +1,19 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { api } from "../api";
 import { INDIVIDUAL_GAS_PER_CREDENTIAL, credentialIdFor, useApp } from "../context";
-import { Badge, Button, Card, Empty, Hash, Icon, PageHeader, fmtNum, useToast } from "../ui";
+import { Badge, Button, Card, Empty, Guide, Hash, Icon, PageHeader, fmtNum, useToast } from "../ui";
 
 const SAMPLE_CSV =
-  "subjectId,name,degree,major,graduationYear,gpa\n" +
-  "did:example:student1,Asha Rao,B.Tech,CSE,2025,9.1\n" +
-  "did:example:student2,Ben Iyer,B.Tech,ECE,2025,8.4\n" +
-  "did:example:student3,Chitra Nair,M.Tech,CSE,2025,9.6\n";
+  "studentId,name,degree,major,graduationYear,gpa\n" +
+  "S101,Asha Rao,B.Tech,CSE,2025,9.1\n" +
+  "S102,Ben Iyer,B.Tech,ECE,2025,8.4\n" +
+  "S103,Chitra Nair,M.Tech,CSE,2025,9.6\n";
 
 function parseCsv(text) {
   const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
   if (lines.length < 2) return { error: "Add a header row and at least one student row." };
-  const header = lines[0].split(",").map((h) => h.trim());
-  if (!header.includes("subjectId")) return { error: 'The header must include a "subjectId" column.' };
+  const header = lines[0].split(",").map((h) => (/^(studentid|id)$/i.test(h.trim()) ? "subjectId" : h.trim()));
+  if (!header.includes("subjectId")) return { error: 'The header must include a "studentId" column.' };
   const cohort = [];
   for (let i = 1; i < lines.length; i++) {
     const cells = lines[i].split(",").map((c) => c.trim());
@@ -21,7 +21,7 @@ function parseCsv(text) {
     const rec = {};
     header.forEach((h, k) => (rec[h] = cells[k]));
     const { subjectId, ...fields } = rec;
-    if (!subjectId) return { error: `Row ${i} is missing a subjectId.` };
+    if (!subjectId) return { error: `Row ${i} is missing a student ID.` };
     cohort.push({ subjectId, fields });
   }
   return { cohort, fieldNames: header.filter((h) => h !== "subjectId") };
@@ -158,6 +158,19 @@ export default function Issuer() {
         Upload the cohort once. Every student's credential is hashed field by field, combined into a Merkle tree, and only the single root is written to the blockchain.
       </PageHeader>
 
+      <Guide
+        id="issuer"
+        title="How to issue credentials"
+        intro="Five steps. Takes about a minute with the sample data."
+        steps={[
+          { title: "Choose the issuing university", text: "Pick from the dropdown in card 1. Only universities admitted by a governance vote can issue.", done: !!institutionAddress },
+          { title: "Load the cohort", text: "In card 2 click Load sample, upload a CSV, or paste one. It needs a studentId column plus one column per field (name, degree, ...).", done: !!parsed.cohort },
+          { title: "Click Issue batch", text: "In card 3. The whole cohort is hashed into a Merkle tree and only its root is written to the blockchain in a single transaction.", done: !!result },
+          { title: "Read the result", text: "The panel on the right shows the Merkle root, the transaction hash, the gas used and the saving against issuing one credential at a time.", done: !!result },
+          { title: "Optional: revoke a credential", text: "In Anchored batches, click a batch row to expand it, then Revoke next to a student and confirm. Verifying that student again will now fail.", go: "verifier", goLabel: "Go to the verifier" },
+        ]}
+      />
+
       <div className="grid-issue">
         <div className="stack">
           <Card title="1. Choose the issuing institution" icon="building">
@@ -176,7 +189,7 @@ export default function Issuer() {
 
           <Card
             title="2. Provide the cohort data"
-            subtitle="CSV with a subjectId column plus one column per credential field"
+            subtitle="CSV with a studentId column plus one column per credential field"
             icon="file"
             actions={
               <>
@@ -202,7 +215,7 @@ export default function Issuer() {
               <div className="table-wrap">
                 <table className="table compact">
                   <thead>
-                    <tr><th>subjectId</th>{parsed.fieldNames.map((f) => <th key={f}>{f}</th>)}</tr>
+                    <tr><th>Student ID</th>{parsed.fieldNames.map((f) => <th key={f}>{f}</th>)}</tr>
                   </thead>
                   <tbody>
                     {parsed.cohort.slice(0, 6).map((s) => (

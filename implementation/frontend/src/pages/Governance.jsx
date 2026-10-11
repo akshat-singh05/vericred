@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { api } from "../api";
 import { PROPOSAL_TYPES, useApp } from "../context";
-import { Badge, Button, Card, Empty, Hash, Icon, PageHeader, timeAgo, useToast } from "../ui";
+import { Badge, Button, Card, Empty, Guide, Hash, Icon, PageHeader, timeAgo, useToast } from "../ui";
 
 const KINDS = [
   { id: "AddInstitution", label: "Add institution", icon: "plus", blurb: "Admit a new university as an issuer." },
@@ -49,6 +49,7 @@ export default function Governance() {
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(null);
   const [offline, setOffline] = useState(false);
+  const [progress, setProgress] = useState({ created: false, executed: false });
 
   const load = useCallback(async () => {
     try {
@@ -85,6 +86,7 @@ export default function Governance() {
       setTarget("");
       setDid("");
       setName("");
+      setProgress((p) => ({ ...p, created: true }));
       await load();
       refreshStats();
     } catch (err) {
@@ -99,6 +101,7 @@ export default function Governance() {
     try {
       const r = await api.voteGovernance(id, actor);
       toast(r.executed ? `Proposal #${id} reached the threshold and was executed` : `Vote recorded (${r.votesFor}/${threshold})`, "success");
+      if (r.executed) setProgress((p) => ({ ...p, executed: true }));
       await load();
       refreshStats();
     } catch (err) {
@@ -145,6 +148,19 @@ export default function Governance() {
       <PageHeader eyebrow="Role: Consortium member" title="Decentralised governance">
         No single party controls who may issue credentials. A change takes effect only once {threshold || "M"} of {members.length || "N"} members approve it on-chain.
       </PageHeader>
+
+      <Guide
+        id="governance"
+        title="How to admit a new university"
+        intro="Changes need approval from 2 of the 3 members, so no one acts alone."
+        steps={[
+          { title: "Choose who you are acting as", text: "Pick a member in the Acting as box. Every vote and proposal is signed by that member.", done: !!actor },
+          { title: "Create a proposal", text: "Pick Add institution, click Generate for a test wallet address, enter a DID (for example did:vericred:university-c) and a display name, then Submit.", done: progress.created },
+          { title: "The proposer's vote counts", text: "The new proposal shows 1 of 2 approvals. It stays open until another member approves.", done: progress.created },
+          { title: "Vote as a different member", text: "Change Acting as to another member and click Vote on the open proposal. At 2 of 2 the contract executes it automatically.", done: progress.executed },
+          { title: "Use the new institution", text: "Once executed, the new university appears in the Issuer page and can anchor credentials.", go: "issuer", goLabel: "Open the issuer" },
+        ]}
+      />
 
       {offline && <Card><Empty icon="alert" title="Governance data unavailable">Start the backend and refresh.</Empty></Card>}
 
@@ -202,7 +218,7 @@ export default function Governance() {
             </label>
             {needsDid && (
               <div className="grid-2-tight">
-                <label className="field"><span>Institution DID</span><input value={did} onChange={(e) => setDid(e.target.value)} placeholder="did:example:university-d" /></label>
+                <label className="field"><span>Institution DID</span><input value={did} onChange={(e) => setDid(e.target.value)} placeholder="did:vericred:university-d" /></label>
                 <label className="field"><span>Display name</span><input value={name} onChange={(e) => setName(e.target.value)} placeholder="University D" /></label>
               </div>
             )}

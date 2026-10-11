@@ -23,8 +23,8 @@ function LogoMark() {
     <svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true">
       <defs>
         <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#5b8cff" />
-          <stop offset="1" stopColor="#22c1b8" />
+          <stop offset="0" stopColor="#34d399" />
+          <stop offset="1" stopColor="#0f766e" />
         </linearGradient>
       </defs>
       <path d="M20 2 36 11v18L20 38 4 29V11z" fill="url(#lg)" />

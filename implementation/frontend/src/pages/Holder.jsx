@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../api";
 import { useApp } from "../context";
-import { Badge, Button, Card, CopyButton, Empty, Hash, Icon, PageHeader, shortHash, useToast } from "../ui";
+import { Badge, Button, Card, CopyButton, Empty, Guide, Hash, Icon, PageHeader, shortHash, useToast } from "../ui";
 
 const SENSITIVE = /gpa|grade|mark|score|percent/i;
 const pretty = (k) => k.replace(/([A-Z])/g, " $1").replace(/^./, (c) => c.toUpperCase());
@@ -28,7 +28,7 @@ export default function Holder() {
   const { setSession, go } = useApp();
   const toast = useToast();
 
-  const [subjectId, setSubjectId] = useState("did:example:student1");
+  const [subjectId, setSubjectId] = useState("S101");
   const [known, setKnown] = useState([]);
   const [credentials, setCredentials] = useState(null);
   const [selected, setSelected] = useState(null);
@@ -120,11 +120,24 @@ export default function Holder() {
         Pick a credential, choose which fields to reveal, and generate a proof. Hidden fields are never sent, only an opaque salted hash, so the employer can confirm authenticity without learning the value.
       </PageHeader>
 
+      <Guide
+        id="holder"
+        title="How to share a credential"
+        intro="You decide exactly which fields the employer gets to see."
+        steps={[
+          { title: "Find your credentials", text: "Type your Student ID (for example S101) and click Find credentials, or click a name under Try. The issuer must have anchored a cohort first.", done: !!credentials && credentials.length > 0, go: "issuer", goLabel: "Issue a cohort first" },
+          { title: "Select a credential", text: "If more than one card appears, click the one you want to share. A single credential is selected automatically.", done: !!selected },
+          { title: "Choose what to reveal", text: "Use the switches. Hidden fields are replaced by an opaque hash. GPA starts hidden. The preview on the right shows what the employer will see.", done: !!selected && !!output },
+          { title: "Generate the presentation", text: "Click Generate presentation. You get a QR code, the proof path, and a small JSON file.", done: !!output },
+          { title: "Hand it to the employer", text: "Click Send to Verifier to try it straight away, or Download .json / Copy JSON to share it.", done: false },
+        ]}
+      />
+
       <Card title="Find your credentials" icon="cap">
         <form className="row gap" onSubmit={(e) => { e.preventDefault(); lookup(); }}>
           <label className="field grow">
-            <span>Student identifier (DID)</span>
-            <input value={subjectId} onChange={(e) => setSubjectId(e.target.value)} placeholder="did:example:student1" />
+            <span>Student ID</span>
+            <input value={subjectId} onChange={(e) => setSubjectId(e.target.value)} placeholder="e.g. S101" />
           </label>
           <Button icon="verify" loading={loading} type="submit" className="align-end">Find credentials</Button>
         </form>
