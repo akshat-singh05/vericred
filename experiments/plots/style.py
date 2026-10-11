@@ -1,13 +1,18 @@
 """Shared matplotlib style for all VeriCred figures.
 
-Design goals (see PLAN.md Phase 3): vector PDF output, serif font matching
-IEEEtran body text, legible at single-column width (3.5in), distinguishable
+Design goals: vector PDF output, serif font matching
+typeset body text, legible at single-column width (3.5in), distinguishable
 in grayscale printing (so every series gets both a distinct marker/linestyle
 AND a distinct gray level, never color alone).
 """
+import os
+from pathlib import Path
 import matplotlib
 matplotlib.use("pdf")
 import matplotlib.pyplot as plt
+
+# Figures are written here; override with the VERICRED_FIG_DIR environment variable.
+FIG_DIR = Path(os.environ.get("VERICRED_FIG_DIR", Path(__file__).parent / "output"))
 
 SINGLE_COL_WIDTH_IN = 3.5
 SINGLE_COL_HEIGHT_IN = 2.6
@@ -47,5 +52,6 @@ def new_figure(width=SINGLE_COL_WIDTH_IN, height=SINGLE_COL_HEIGHT_IN):
 
 
 def save(fig, out_path):
+    Path(out_path).parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_path)
     print(f"Wrote {out_path}")

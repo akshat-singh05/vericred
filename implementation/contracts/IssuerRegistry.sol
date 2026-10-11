@@ -6,7 +6,7 @@ import "./interfaces/IIssuerRegistry.sol";
 /// @notice Tracks each member institution's DID and full signing-key
 /// rotation history. All mutations (registration, deactivation, key
 /// rotation) are restricted to the ConsortiumGovernance contract so that key
-/// rotation is itself a governed, M-of-N action (see PLAN.md C3) rather than
+/// rotation is itself a governed, M-of-N action rather than
 /// something a single compromised key can do unilaterally.
 contract IssuerRegistry is IIssuerRegistry {
     struct KeyRecord {

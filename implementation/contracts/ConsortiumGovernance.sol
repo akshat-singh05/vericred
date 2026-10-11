@@ -13,8 +13,8 @@ interface IIssuerRegistryAdmin is IIssuerRegistry {
 /// @notice M-of-N consortium governance. Member universities/accreditation
 /// bodies vote on admitting a new institution, removing one, or rotating an
 /// institution's signing key. This is the mechanism that replaces the
-/// single-issuer trust model of Blockcerts/EduCTX/UniverCert (see PLAN.md
-/// §1-§2, contribution C3).
+/// single-issuer trust model of Blockcerts/EduCTX/UniverCert with M-of-N
+/// consortium consent.
 contract ConsortiumGovernance {
     enum ProposalType {
         AddInstitution,

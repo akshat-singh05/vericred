@@ -15,7 +15,7 @@ function hashPair(a, b) {
   return ethers.keccak256(ethers.concat([NODE_TAG, x, y]));
 }
 
-/** leaf_i = H(0x00 || H(fieldName) || H(value) || salt) — see PLAN.md/paper §7 for the formal notation. */
+/** leaf_i = H(0x00 || H(fieldName) || H(value) || salt) (field name and value are hashed first, then bound to a per-field salt). */
 function hashField(fieldName, value, saltHex) {
   const fieldNameHash = ethers.keccak256(ethers.toUtf8Bytes(fieldName));
   const valueHash = ethers.keccak256(ethers.toUtf8Bytes(String(value)));

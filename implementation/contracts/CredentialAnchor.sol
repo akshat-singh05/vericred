@@ -5,9 +5,9 @@ import "./interfaces/IIssuerRegistry.sol";
 import "./interfaces/ICredentialAnchor.sol";
 
 /// @notice Anchors either (a) a whole cohort's Merkle batch root in one
-/// transaction ("O(1) per batch" — contribution C1), or (b) a single
+/// transaction ("O(1) per batch"), or (b) a single
 /// credential hash, kept only as the naive per-credential baseline used for
-/// Experiment 1's gas comparison (see PLAN.md §4).
+/// the issuance-cost gas comparison (experiments/).
 contract CredentialAnchor is ICredentialAnchor {
     struct Batch {
         address issuer;

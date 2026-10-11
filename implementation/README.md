@@ -1,7 +1,7 @@
 # VeriCred — implementation
 
-Contracts, off-chain services, backend API, and a demo React frontend for
-the architecture described in [PLAN.md](../PLAN.md).
+Contracts, off-chain services, backend API, and the React console for the
+VeriCred architecture. See the [project README](../README.md) for the overview.
 
 ## One-command setup
 
@@ -86,7 +86,7 @@ test/                  Hardhat test suite (contracts + end-to-end off-chain/on-c
 ## Identity model (read this before extending the backend)
 
 Each institution has **two separate keys**, deliberately decoupled (see
-`offchain/verifier.js` and PLAN.md contribution C3):
+`offchain/verifier.js`):
 
 - an **on-chain account** — used to call `anchorBatch`/`vote`/`revoke`
   (governed by `IssuerRegistry.isActiveIssuer`, keyed by this address);
@@ -102,7 +102,7 @@ credential in one process. **This is a prototype simplification, not a
 production design** — a real deployment keeps that key in an HSM or the
 institution's own signing service and never sends it to a shared backend.
 
-## Scope & simplifications (for the paper's Implementation/Limitations sections)
+## Scope and simplifications
 
 - `backend/store.js` retains each student's field salts centrally so the
   demo can show the full issuer→holder→verifier flow without building a
@@ -111,7 +111,7 @@ institution's own signing service and never sends it to a shared backend.
 - The Hardhat network used for `npm run node` is a single-node devnet — it
   models the *authorization* layer of a permissioned consortium (who may
   call what, gated by `IssuerRegistry`/`ConsortiumGovernance`), not real
-  multi-validator PoA/QBFT consensus. See PLAN.md §3.
-- Selective disclosure here is salted-hash based, not zero-knowledge — see
-  PLAN.md contribution C1 and the paper's Security & Privacy Analysis for
-  the resulting linkability limitation.
+  multi-validator PoA/QBFT consensus.
+- Selective disclosure here is salted-hash based, not zero-knowledge. As a
+  result, two presentations of the same credential can be linked to each other
+  through the shared student root.

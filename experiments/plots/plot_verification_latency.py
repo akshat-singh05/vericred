@@ -1,10 +1,10 @@
 import pandas as pd
 from pathlib import Path
-from style import new_figure, save, SERIES_STYLES
+from style import new_figure, save, SERIES_STYLES, FIG_DIR
 
 RESULTS = Path(__file__).parent.parent / "results" / "verification_latency.csv"
-OUT_STACK = Path(__file__).parent.parent.parent / "paper" / "figures" / "pdf" / "verification_latency_breakdown.pdf"
-OUT_PROOF = Path(__file__).parent.parent.parent / "paper" / "figures" / "pdf" / "verification_proof_length.pdf"
+OUT_STACK = FIG_DIR / "verification_latency_breakdown.pdf"
+OUT_PROOF = FIG_DIR / "verification_proof_length.pdf"
 
 df = pd.read_csv(RESULTS)
 

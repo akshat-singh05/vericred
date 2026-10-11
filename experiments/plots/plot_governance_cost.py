@@ -1,9 +1,9 @@
 import pandas as pd
 from pathlib import Path
-from style import new_figure, save
+from style import new_figure, save, FIG_DIR
 
 RESULTS = Path(__file__).parent.parent / "results" / "governance_cost.csv"
-OUT = Path(__file__).parent.parent.parent / "paper" / "figures" / "pdf" / "governance_cost.pdf"
+OUT = FIG_DIR / "governance_cost.pdf"
 
 df = pd.read_csv(RESULTS)
 labels = [f"{m}-of-{n}" for m, n in zip(df["threshold_M"], df["totalMembers_N"])]

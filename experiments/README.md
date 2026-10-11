@@ -42,10 +42,10 @@ python plot_throughput.py
 python plot_governance_cost.py
 ```
 
-Writes vector PDFs to `../../paper/figures/pdf/`, styled per `style.py`
-(serif font matching IEEEtran body text, single-column width, distinct
-marker+linestyle+gray-level per series so figures stay legible printed in
-grayscale).
+Writes vector PDFs to `experiments/plots/output/` (override the location with
+the `VERICRED_FIG_DIR` environment variable), styled per `style.py` (serif
+font, single-column width, distinct marker+linestyle+gray-level per series so
+figures stay legible printed in grayscale).
 
 ## What each CSV contains and how to read it
 
@@ -65,8 +65,7 @@ grayscale).
   each trial using a disjoint credential-id range so no trial benefits from
   a previous trial's warm storage access. The realized savings (~32% at
   n=10/100, ~0% at n=1) is **smaller than the naive "256 credentials per
-  slot" intuition would suggest** — see the paper's Protocol/Security
-  section for why: EIP-2929/EIP-3529 price a zero→nonzero SSTORE
+  slot" intuition would suggest**, because EIP-2929/EIP-3529 price a zero→nonzero SSTORE
   (`SSTORE_SET`, ~20000 gas) far higher than a nonzero→nonzero SSTORE within
   an already-touched word (~2900–5000 gas), so the bitmap only wins once a
   slot's first bit has already paid the zero→nonzero cost.
@@ -88,19 +87,19 @@ grayscale).
   `POST /verifier/verify` requests. Throughput plateaus around 24–34 req/s
   regardless of concurrency while p50/p95 latency grows roughly linearly —
   this reflects the backend issuing 6 sequential on-chain reads per
-  verification with no caching, not a fundamental protocol limit; see
-  Limitations.
+  verification with no caching, not a fundamental protocol limit (caching
+  or batching the reads would raise it).
 - **governance_cost.csv** — gas and transaction count to onboard one issuer
   under different M-of-N settings, each on a freshly deployed
   `ConsortiumGovernance` instance so results aren't affected by prior state.
 - **comparative_analysis.csv** — qualitative feature comparison against the
-  systems surveyed in PLAN.md §1 (not experimentally measured; sourced from
-  each system's own documentation/paper, cited in `source`).
+  related systems (not experimentally measured; sourced from each system's
+  own documentation or publication, cited in the `source` column).
 
 ## What was not run
 
 Nothing in this round required a public testnet deployment; the primary
-deployment target is the gas-free permissioned network per PLAN.md §3, and
-the public-L2 cost comparison mentioned there is deferred — if pursued, its
+deployment target is the gas-free permissioned network, and a public-L2
+cost comparison is deferred — if pursued, its
 numbers will replace this line with real testnet-measured figures rather
 than an estimate.

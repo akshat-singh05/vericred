@@ -13,8 +13,7 @@ function writeCsv(filename, rows) {
   console.log(`Wrote ${rows.length} rows to experiments/results/${filename}`);
 }
 
-// Illustrative, explicitly-stated cost-conversion assumptions (see PLAN.md §4 and
-// the paper's Performance Evaluation setup) — the primary deployment target is the
+// Illustrative, explicitly-stated cost-conversion assumptions — the primary deployment target is the
 // gas-free permissioned consortium network; USD figures are only for the secondary
 // public-L1/L2 cost comparison, and are NOT live-fetched market data.
 const GAS_PRICE_GWEI = 20;

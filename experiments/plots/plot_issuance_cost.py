@@ -1,9 +1,9 @@
 import pandas as pd
 from pathlib import Path
-from style import new_figure, save, SERIES_STYLES
+from style import new_figure, save, SERIES_STYLES, FIG_DIR
 
 RESULTS = Path(__file__).parent.parent / "results" / "issuance_cost.csv"
-OUT = Path(__file__).parent.parent.parent / "paper" / "figures" / "pdf" / "issuance_cost.pdf"
+OUT = FIG_DIR / "issuance_cost.pdf"
 
 df = pd.read_csv(RESULTS)
 

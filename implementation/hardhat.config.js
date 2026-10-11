@@ -2,8 +2,7 @@ require("@nomicfoundation/hardhat-toolbox");
 
 /**
  * The "permissionedConsortium" network name is just the built-in Hardhat
- * in-process network — see PLAN.md Section 3 for why authorization (who may
- * write what) is modeled at the contract layer here rather than via a real
+ * in-process network. Authorization (who may write what) is modeled at the contract layer here rather than via a real
  * multi-validator PoA/QBFT network.
  */
 module.exports = {

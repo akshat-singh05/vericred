@@ -1,16 +1,20 @@
-# React + Vite
+# VeriCred console
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React 19 + Vite single-page app for the four roles (university, student, employer, consortium member), plus an overview dashboard and a how-it-works page.
 
-Currently, two official plugins are available:
+```bash
+npm install
+npm run dev      # http://127.0.0.1:5173
+npm run build    # production bundle in dist/
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The app talks to the backend at `http://127.0.0.1:4000`. Set `VITE_API_BASE` to point it elsewhere. Start the chain, deploy the contracts and run the backend first (see the [project README](../../README.md#quick-start)).
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+```
+src/
+  App.jsx        App shell, navigation, live stats polling
+  api.js         Typed wrapper over the backend REST API
+  ui.jsx         Design-system components (cards, buttons, badges, guide, toasts, icons)
+  context.jsx    Shared app context and constants
+  pages/         Overview, Issuer, Holder, Verifier, Governance, HowItWorks
+```
