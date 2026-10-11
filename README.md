@@ -9,6 +9,7 @@ VeriCred lets a university anchor an entire graduating class on a blockchain in 
 [![React](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=white)](https://react.dev/)
 [![Node](https://img.shields.io/badge/Node.js-20%2B-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![Tests](https://img.shields.io/badge/tests-52%20passing-brightgreen)](#testing)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 
@@ -28,6 +29,7 @@ VeriCred lets a university anchor an entire graduating class on a blockchain in 
 - [Repository layout](#repository-layout)
 - [Security model and limitations](#security-model-and-limitations)
 - [Team](#team)
+- [License](#license)
 
 ---
 
@@ -255,3 +257,7 @@ This is a research prototype. Read these before extending it.
 ## Team
 
 Developed at **Vellore Institute of Technology (VIT), Vellore** by **Akshat Singh** and **Nabhya Maheshwari**, under the guidance of **Poornima N**, Assistant Professor Sr. Grade 1.
+
+## License
+
+Released under the [MIT License](LICENSE).
