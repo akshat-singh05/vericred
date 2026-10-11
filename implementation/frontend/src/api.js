@@ -15,6 +15,7 @@ async function request(path, options = {}) {
 
 export const api = {
   health: () => request("/health"),
+  stats: () => request("/stats"),
 
   listInstitutions: () => request("/issuer/institutions"),
   parseCohortCsv: (file) => {

@@ -50,8 +50,12 @@ Listens on `http://127.0.0.1:4000`. Check `GET /health`.
 ```bash
 cd frontend && npm run dev
 ```
-Opens on `http://127.0.0.1:5173`. Covers all four roles as tabs: Issuer,
-Holder, Verifier, Governance.
+Opens on `http://127.0.0.1:5173`. A presentation console with an Overview
+dashboard (live chain stats, measured gas chart, on-chain activity feed), one
+page per role (Issuer, Holder, Verifier, Governance), and a "How it works"
+page. Suggested demo order: Issuer (anchor the sample cohort) -> Holder (hide
+the GPA, "Send to Verifier") -> Verifier (verify, then "Simulate tampering")
+-> Governance (propose, vote to the 2-of-3 threshold).
 
 ## Running tests
 

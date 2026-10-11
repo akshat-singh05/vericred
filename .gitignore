@@ -26,3 +26,4 @@ implementation/frontend/dist/
 implementation/frontend/build/
 __pycache__/
 *.pyc
+*.err

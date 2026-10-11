@@ -7,6 +7,7 @@ const issuerRoutes = require("./routes/issuer");
 const holderRoutes = require("./routes/holder");
 const verifierRoutes = require("./routes/verifier");
 const governanceRoutes = require("./routes/governance");
+const statsRoutes = require("./routes/stats");
 
 const app = express();
 app.use(cors());
@@ -32,6 +33,7 @@ app.use("/issuer", issuerRoutes(contracts));
 app.use("/holder", holderRoutes());
 app.use("/verifier", verifierRoutes(contracts));
 app.use("/governance", governanceRoutes(contracts));
+app.use("/stats", statsRoutes(contracts));
 
 app.use((err, req, res, next) => {
   console.error(err);
